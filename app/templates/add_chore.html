@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Chore</title>
+</head>
+<body>
+    <h1>Add Chore</h1>
+    <form method="post">
+        <label for="name">Chore Name:</label>
+        <input type="text" id="name" name="name" required><br>
+
+        <label for="due_date">Due Date:</label>
+        <input type="date" id="due_date" name="due_date" required><br>
+
+        <label for="frequency">Frequency:</label>
+        <select id="frequency" name="frequency" required>
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="bi-weekly">Bi-Weekly</option>
+            <option value="monthly">Monthly</option>
+        </select><br>
+
+        <label for="child_id">Assign to:</label>
+        <select id="child_id" name="child_id">
+            {% for child in children %}
+            <option value="{{ child.id }}">{{ child.name }}</option>
+            {% endfor %}
+        </select><br>
+
+        <button type="submit">Add</button>
+    </form>
+</body>
+</html>

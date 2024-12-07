@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chore Tracker</title>
+    <style>
+        .due {
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        async function markComplete(choreId) {
+            const response = await fetch(`/mark_complete/${choreId}`, { method: "POST" });
+            if (response.ok) {
+                // Reload the page to reflect updated chores and log
+                window.location.reload();
+            } else {
+                const data = await response.json();
+                alert(data.error || data.message);
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Chore Tracker</h1>
+
+    <h2>Chores</h2>
+    <ul>
+        {% for child in children %}
+        <li>
+            <h3>{{ child.name }} (Balance: ${{ "%.2f"|format(child.balance) }})</h3>
+            <ul>
+                {% for chore in child.chores %}
+                <li id="chore-{{ chore.id }}" class="{% if chore.due_date <= today %}due{% endif %}">
+                    {{ chore.name }} (<span class="due-date">Due: {{ chore.due_date }}</span>)
+                    {% if not chore.is_complete %}
+                        <button class="mark-complete" onclick="markComplete({{ chore.id }})">Mark Complete</button>
+                    {% else %}
+                        Completed
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Completed Chores</h2>
+    <ul>
+        {% for completed_chore in completed_chores %}
+        <li>
+            {{ completed_chore.name }} - Completed by {{ completed_chore.child.name }} on 
+            {{ completed_chore.completed_date.strftime('%Y-%m-%d %H:%M:%S') }}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <ul>
+    <li><a href="/add_chore">Add Chore</a></li>
+    <li><a href="/edit_chores">Edit Chores</a></li>
+    <li><a href="/configure_allowances">Configure Allowances</a></li>
+</ul>
+</body>
+</html>

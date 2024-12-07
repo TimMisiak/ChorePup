@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Chores</title>
+</head>
+<body>
+    <h1>Edit Chores</h1>
+    {% for chore in chores %}
+    <div>
+        <h3>Chore ID: {{ chore.id }}</h3>
+        <form method="post" action="/update_chore/{{ chore.id }}">
+            <label for="name-{{ chore.id }}">Name:</label>
+            <input type="text" id="name-{{ chore.id }}" name="name" value="{{ chore.name }}" required><br>
+
+            <label for="due_date-{{ chore.id }}">Due Date:</label>
+            <input type="date" id="due_date-{{ chore.id }}" name="due_date" value="{{ chore.due_date }}" required><br>
+
+            <label for="frequency-{{ chore.id }}">Frequency:</label>
+            <select id="frequency-{{ chore.id }}" name="frequency">
+                <option value="daily" {% if chore.frequency == "daily" %}selected{% endif %}>Daily</option>
+                <option value="weekly" {% if chore.frequency == "weekly" %}selected{% endif %}>Weekly</option>
+                <option value="bi-weekly" {% if chore.frequency == "bi-weekly" %}selected{% endif %}>Bi-Weekly</option>
+                <option value="monthly" {% if chore.frequency == "monthly" %}selected{% endif %}>Monthly</option>
+            </select><br>
+
+            <label for="child_id-{{ chore.id }}">Assigned to:</label>
+            <select id="child_id-{{ chore.id }}" name="child_id" required>
+                {% for child in children %}
+                <option value="{{ child.id }}" {% if chore.child_id == child.id %}selected{% endif %}>
+                    {{ child.name }}
+                </option>
+                {% endfor %}
+            </select><br>
+
+            <button type="submit" formaction="/update_chore/{{ chore.id }}">Save Changes</button>
+            <button type="submit" formaction="/delete_chore/{{ chore.id }}">Delete</button>
+        </form>
+    </div>
+    {% endfor %}
+    <a href="/">Back to Home</a>
+</body>
+</html>
