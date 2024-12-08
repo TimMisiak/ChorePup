@@ -2,6 +2,9 @@ from flask import render_template, request, redirect, url_for, jsonify
 from app.models import db, Child, Chore, CompletedChore
 from datetime import datetime, timedelta
 import calendar
+import pytz
+
+tz = pytz.timezone('US/Pacific')
 
 def calculate_next_due_date(current_date, frequency):
     if frequency == "daily":
@@ -37,7 +40,7 @@ def create_tables(app):
 
 def get_children_and_update_allowance():
     children = Child.query.all()
-    today = datetime.now().date()
+    today = datetime.now(tz).date()
 
     for child in children:
         if child.last_allowance_date:
@@ -56,7 +59,7 @@ def init_routes(app):
     @app.route("/")
     def home():
         children = get_children_and_update_allowance()
-        today = datetime.now().date()
+        today = datetime.now(tz).date()
         
         # Sort chores for each child: due (today or past) first, then future
         for child in children:
@@ -115,12 +118,12 @@ def init_routes(app):
                 chore_id=chore.id,
                 child_id=chore.child_id,
                 name=chore.name,
-                completed_date=datetime.utcnow()
+                completed_date=datetime.now(tz)
             )
             db.session.add(completed_chore)
 
             # Update the chore for recurring tasks
-            current_date = datetime.now().date()
+            current_date = datetime.now(tz).date()
             if chore.frequency in ["daily", "every 2 days", "weekly", "bi-weekly", "monthly"]:
                 chore.due_date = calculate_next_due_date(current_date, chore.frequency)
                 chore.is_complete = False  # Reset for the next occurrence
