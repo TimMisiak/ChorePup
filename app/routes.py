@@ -5,6 +5,8 @@ from datetime import datetime, timedelta
 def calculate_next_due_date(current_date, frequency):
     if frequency == "daily":
         return current_date + timedelta(days=1)
+    elif frequency == "every 2 days":
+        return current_date + timedelta(days=2)
     elif frequency == "weekly":
         return current_date + timedelta(weeks=1)
     elif frequency == "bi-weekly":
@@ -111,7 +113,7 @@ def init_routes(app):
 
             # Update the chore for recurring tasks
             current_date = datetime.now().date()
-            if chore.frequency in ["daily", "weekly", "bi-weekly", "monthly"]:
+            if chore.frequency in ["daily", "every 2 days", "weekly", "bi-weekly", "monthly"]:
                 chore.due_date = calculate_next_due_date(current_date, chore.frequency)
                 chore.is_complete = False  # Reset for the next occurrence
             else:

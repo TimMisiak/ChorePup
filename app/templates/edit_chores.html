@@ -18,6 +18,7 @@
             <label for="frequency-{{ chore.id }}">Frequency:</label>
             <select id="frequency-{{ chore.id }}" name="frequency">
                 <option value="daily" {% if chore.frequency == "daily" %}selected{% endif %}>Daily</option>
+                <option value="every 2 days" {% if chore.frequency == "every 2 days" %}selected{% endif %}>Every 2 days</option>
                 <option value="weekly" {% if chore.frequency == "weekly" %}selected{% endif %}>Weekly</option>
                 <option value="bi-weekly" {% if chore.frequency == "bi-weekly" %}selected{% endif %}>Bi-Weekly</option>
                 <option value="monthly" {% if chore.frequency == "monthly" %}selected{% endif %}>Monthly</option>
