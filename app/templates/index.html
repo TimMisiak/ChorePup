@@ -32,7 +32,7 @@
             <ul>
                 {% for chore in child.chores %}
                 <li id="chore-{{ chore.id }}" class="{% if chore.due_date <= today %}due{% endif %}">
-                    {{ chore.name }} (<span class="due-date">Due: {{ chore.due_date }}</span>)
+                    {{ chore.name }} (<span class="due-date">Due: {{ chore.friendly_date }}</span>)
                     {% if not chore.is_complete %}
                         <button class="mark-complete" onclick="markComplete({{ chore.id }})">Mark Complete</button>
                     {% else %}

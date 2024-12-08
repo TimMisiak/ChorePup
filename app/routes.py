@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for, jsonify
 from app.models import db, Child, Chore, CompletedChore
 from datetime import datetime, timedelta
+import calendar
 
 def calculate_next_due_date(current_date, frequency):
     if frequency == "daily":
@@ -60,6 +61,13 @@ def init_routes(app):
         # Sort chores for each child: due (today or past) first, then future
         for child in children:
             child.chores.sort(key=lambda chore: (chore.due_date > today, chore.due_date))
+            for chore in child.chores:
+                day_of_week = calendar.day_name[chore.due_date.weekday()]
+                month_name = calendar.month_name[chore.due_date.month]
+                if chore.due_date.year == today.year:
+                    chore.friendly_date = f'{day_of_week}, {month_name} {chore.due_date.day}'
+                else:
+                    chore.friendly_date = f'{day_of_week}, {month_name} {chore.due_date.day}, {chore.year}'
 
         completed_chores = CompletedChore.query.order_by(CompletedChore.completed_date.desc()).all()
         return render_template("index.html", children=children, completed_chores=completed_chores, today=today)
