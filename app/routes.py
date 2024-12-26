@@ -70,7 +70,7 @@ def init_routes(app):
                 if chore.due_date.year == today.year:
                     chore.friendly_date = f'{day_of_week}, {month_name} {chore.due_date.day}'
                 else:
-                    chore.friendly_date = f'{day_of_week}, {month_name} {chore.due_date.day}, {chore.year}'
+                    chore.friendly_date = f'{day_of_week}, {month_name} {chore.due_date.day}, {chore.due_date.year}'
 
         completed_chores = CompletedChore.query.order_by(CompletedChore.completed_date.desc()).all()
         return render_template("index.html", children=children, completed_chores=completed_chores, today=today)
